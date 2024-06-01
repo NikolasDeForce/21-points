@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 Point</title>
+  </head>
+  <body>
+    <center>
+      <h1>{{ .Title }}</h1>
+    </center>
+    <center>
+      <h2>------------------------------------------------------------------------</h2>
+    </center>
+    <center>
+      <h1>ROLE</h1>
+    </center>
+      <h2>1. The dealer deals two cards to each player.</h2>
+      <h2>2. All cards give the player a certain number of points: ace — 1 point or 11 points, king — 4 points, queen — 3 points, jack — 2 points, the rest of the cards according to their face value.</h2> 
+      <h2>3. The player's goal is to collect 21 points or the number closest to it.</h2> 
+      <h2>4. After the player has received two cards, he can ask for more.</h2> 
+      <h2>5. When the dealer has given the players as many cards as they asked for, the players open up and show the cards.</h2>
+      <center>
+        <h2>{{ .Text }}</h2>
+      </center>
+    <center>
+      <form action="http://localhost:8010/game/start">
+        <button type="submit">Start Game</button>
+      </form>
+    </center>
+    <center>
+      <form action="http://localhost:8010/game/rus">
+        <button type="submit">Russian</button>
+      </form>
+    </center>
+  </body>
+</html>
