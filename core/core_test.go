@@ -1,7 +1,11 @@
 package core_test
 
 import (
+<<<<<<< HEAD
 	point "point"
+=======
+	point "point/core"
+>>>>>>> c1dccae (Game 21 Points -- all test passed)
 	"testing"
 )
 
