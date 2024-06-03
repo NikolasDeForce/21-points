@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 Point</title>
+  </head>
+  <body>
+    
+    <center>
+      <h1>Player {{ .PlayerName }} Results:</h1>
+    </center>
+
+    <center>
+      <h1>Cards: {{ .Card }}</h1>
+      <h1>Points: {{ .Points }}</h1>
+      <h1>Bet: {{ .Bet }}</h1>
+    </center>
+
+    <center>
+      <form action="http://localhost:8010/game/start/diler">
+        <button type="submit">Show hand</button>
+      </form>
+    </center>
+    <center>
+      <form action="http://localhost:8010/game/eng">
+        <button type="submit">Back to menu(eng)</button>
+      </form>
+    </center>
+    <center>
+      <form action="http://localhost:8010/game/rus">
+        <button type="submit">Back to menu(rus)</button>
+      </form>
+    </center>
+  </body>
+</html>

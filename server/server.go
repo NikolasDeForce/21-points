@@ -15,27 +15,39 @@ type Content struct {
 	Text  string
 }
 
-type GamePlayerContent struct {
-	NamePlayer   string
-	MoneyPlayer  int
-	BetPlayer    int
-	CardPlayer   string
-	PointsPlayer int
-	Bot          GameBotContent
-	Winner       string
+type Final struct {
+	Winner      core.Winner
+	PlayerMoney core.Players
+	BotMoney    core.Bot
 }
 
-type GameBotContent struct {
-	NameBot   string
-	MoneyBot  int
-	BetBot    int
-	CardBot   string
-	PointsBot int
+var p = core.Players{
+	PlayerName: "Player",
+	Money:      2000,
+	Bet:        200,
+	Card:       "",
+	Points:     0,
 }
+
+var b = core.Bot{
+	DefName: "Diler",
+	Money:   2000,
+	Bet:     200,
+	Card:    "",
+	Points:  0,
+}
+
+var win = core.Winner{
+	WinnerName: "",
+}
+
+var resPlayer, resBot, winner = core.StartGame(&p, &b, &win)
 
 var port = ":8010"
 
 func gameEngHandler(w http.ResponseWriter, r *http.Request) {
+	resPlayer, resBot, winner = core.StartGame(&p, &b, &win)
+
 	tmpl, _ := template.ParseFiles("gameeng.html")
 
 	content := Content{
@@ -53,6 +65,8 @@ func gameEngHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func gameRusHandler(w http.ResponseWriter, r *http.Request) {
+	resPlayer, resBot, winner = core.StartGame(&p, &b, &win)
+
 	tmpl, _ := template.ParseFiles("gamerus.html")
 
 	content := Content{
@@ -69,45 +83,40 @@ func gameRusHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func gameStartHandler(w http.ResponseWriter, r *http.Request) {
-	p := core.Players{
-		PlayerName: "Nick",
-		Money:      2000,
-		Bet:        200,
-		Card:       "",
-		Points:     0,
-	}
-	b := core.Bot{
-		DefName: "Diler",
-		Money:   2000,
-		Bet:     200,
-		Card:    "",
-		Points:  0,
-	}
-	win := core.Winner{
-		WinnerName: "",
+func gamePlayerHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("gameplayer.html")
+
+	err := tmpl.Execute(w, resPlayer)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	resPlayer, resBot, winner := core.StartGame(&p, &b, &win)
+	log.Printf("Hello from %v", r.Host)
+	w.WriteHeader(http.StatusOK)
+}
 
-	tmpl, _ := template.ParseFiles("gamestartplayer.html")
+func gameDilerHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("gamediler.html")
 
-	contentPlayer := GamePlayerContent{
-		NamePlayer:   resPlayer.PlayerName,
-		MoneyPlayer:  resPlayer.Money,
-		BetPlayer:    resPlayer.Bet,
-		CardPlayer:   resPlayer.Card,
-		PointsPlayer: resPlayer.Points,
-		Bot: GameBotContent{
-			resBot.DefName,
-			resBot.Money,
-			resBot.Bet,
-			resBot.Card,
-			resBot.Points,
-		},
-		Winner: winner.WinnerName,
+	err := tmpl.Execute(w, resBot)
+	if err != nil {
+		fmt.Println(err)
 	}
-	err := tmpl.Execute(w, contentPlayer)
+
+	log.Printf("Hello from %v", r.Host)
+	w.WriteHeader(http.StatusOK)
+}
+
+func gameFinalHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("gamefinal.html")
+
+	final := Final{
+		Winner:      winner,
+		PlayerMoney: resPlayer,
+		BotMoney:    resBot,
+	}
+
+	err := tmpl.Execute(w, final)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -133,10 +142,13 @@ func main() {
 
 	mux.Handle("/game/eng", http.HandlerFunc(gameEngHandler))
 	mux.Handle("/game/rus", http.HandlerFunc(gameRusHandler))
-	mux.Handle("/game/start", http.HandlerFunc(gameStartHandler))
+	mux.Handle("/game/start/player", http.HandlerFunc(gamePlayerHandler))
+	mux.Handle("/game/start/diler", http.HandlerFunc(gameDilerHandler))
+	mux.Handle("/game/final", http.HandlerFunc(gameFinalHandler))
+
+	fmt.Println("Ready to Serve HTTP to PORT", port)
 
 	err := s.ListenAndServe()
-	fmt.Println("Ready to Serve HTTP to PORT", port)
 	if err != nil {
 		fmt.Println(err)
 		return
