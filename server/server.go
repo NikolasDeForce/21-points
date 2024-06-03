@@ -5,11 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-<<<<<<< HEAD
-	core "point"
-=======
 	core "point/core"
->>>>>>> c1dccae (Game 21 Points -- all test passed)
 	"text/template"
 	"time"
 )
