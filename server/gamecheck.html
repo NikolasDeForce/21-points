@@ -12,25 +12,28 @@
     <center>
         <form>
             <p><input type="text" name="userName" placeholder="Insert your Name" size="18" /></p>
-            <p><input type="text" name="userBet" placeholder="Default Bet=200" size="18" maxlength="11" /></p>
+            <p><input type="text" name="userBet" value="200" size="18" maxlength="11" /></p>
             <p>
                 <button type="submit">Submit</button> 
             </p>
         </form>
+    </center>
     <center>
-        
+      <h1>Your Balance: 2000</h1>
+      <h1>Default Bet: 200</h1>
+      <h2>Bet cannot be biggest to your balance</h2>
+    </center>
+    <center>
+      <h2>-----------------------------------------------------------------------------------------------</h2>
+    </center>
+    <center>
       <form action="http://localhost:8010/game/start/player">
         <button type="submit">GO</button>
       </form>
     </center>
     <center>
       <form action="http://localhost:8010/game">
-        <button type="submit">Back to menu(eng)</button>
-      </form>
-    </center>
-    <center>
-      <form action="http://localhost:8010/game/rus">
-        <button type="submit">Back to menu(rus)</button>
+        <button type="submit">Back to menu</button>
       </form>
     </center>
   </body>

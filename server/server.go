@@ -128,6 +128,22 @@ func gameParametrsHandler(w http.ResponseWriter, r *http.Request) {
 func gamePlayerHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("gameplayer.html")
 
+	r.ParseForm()
+
+	err := tmpl.Execute(w, resPlayer)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	log.Printf("Hello from %v", r.Host)
+	w.WriteHeader(http.StatusOK)
+}
+
+func gameTakeHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("gametake.html")
+
+	p = core.TakeOne(&resPlayer)
+
 	err := tmpl.Execute(w, resPlayer)
 	if err != nil {
 		fmt.Println(err)
@@ -186,6 +202,7 @@ func main() {
 	mux.Handle("/game/rus", http.HandlerFunc(gameRusHandler))
 	mux.Handle("/game/check", http.HandlerFunc(gameParametrsHandler))
 	mux.Handle("/game/start/player", http.HandlerFunc(gamePlayerHandler))
+	mux.Handle("/game/start/player/take", http.HandlerFunc(gameTakeHandler))
 	mux.Handle("/game/start/diler", http.HandlerFunc(gameDilerHandler))
 	mux.Handle("/game/final", http.HandlerFunc(gameFinalHandler))
 
