@@ -7,18 +7,20 @@
   </head>
   <body>
     <center>
-      <h1>{{ .DefName }} Results:</h1>
+      <h1>Please, insert your Name and make a Bet</h1>
     </center>
-
     <center>
-      <h1>Cards: {{ .Card }}</h1>
-      <h1>Points: {{ .Points }}</h1>
-      <h1>Bet: {{ .Bet }}</h1>
-    </center>
-
+        <form>
+            <p><input type="text" name="userName" placeholder="Insert your Name" size="18" /></p>
+            <p><input type="text" name="userBet" placeholder="Default Bet=200" size="18" maxlength="11" /></p>
+            <p>
+                <button type="submit">Submit</button> 
+            </p>
+        </form>
     <center>
-      <form action="http://localhost:8010/game/final">
-        <button type="submit">Show Results</button>
+        
+      <form action="http://localhost:8010/game/start/player">
+        <button type="submit">GO</button>
       </form>
     </center>
     <center>

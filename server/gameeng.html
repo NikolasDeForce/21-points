@@ -10,7 +10,7 @@
       <h1>{{ .Title }}</h1>
     </center>
     <center>
-      <h2>------------------------------------------------------------------------</h2>
+      <h2>-----------------------------------------------------------------------------------------------</h2>
     </center>
     <center>
       <h1>ROLE</h1>
@@ -21,10 +21,13 @@
       <h2>4. After the player has received two cards, he can ask for more.</h2> 
       <h2>5. When the dealer has given the players as many cards as they asked for, the players open up and show the cards.</h2>
       <center>
+        <h2>-----------------------------------------------------------------------------------------------</h2>
+      </center>
+      <center>
         <h2>{{ .Text }}</h2>
       </center>
     <center>
-      <form action="http://localhost:8010/game/start/player">
+      <form action="http://localhost:8010/game/check">
         <button type="submit">Start Game</button>
       </form>
     </center>
