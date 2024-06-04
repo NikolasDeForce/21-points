@@ -98,16 +98,16 @@ func GameBot(b *Bot) Bot {
 
 func StartGame(p *Players, b *Bot, w *Winner) (Players, Bot, Winner) {
 	resultPlayer := GamePlayer(&Players{
-		PlayerName: "Nick",
+		PlayerName: p.PlayerName,
 		Money:      2000,
-		Bet:        200,
+		Bet:        p.Bet,
 		Card:       "",
 		Points:     0,
 	})
 	resultBot := GameBot(&Bot{
 		DefName: "Diler",
 		Money:   2000,
-		Bet:     200,
+		Bet:     b.Bet,
 		Card:    "",
 		Points:  0,
 	})
