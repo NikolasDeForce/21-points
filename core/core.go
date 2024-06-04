@@ -40,6 +40,32 @@ func Pick(m map[string]int) (string, int) {
 	return str, res
 }
 
+func TakeOne(p *Players) Players {
+	cards := map[string]int{
+		"A":  11,
+		"K":  4,
+		"Q":  3,
+		"J":  2,
+		"10": 10,
+		"9":  9,
+		"8":  8,
+		"7":  7,
+		"6":  6,
+	}
+
+	getCardKey, getCardVal := Pick(cards)
+	p.Card += getCardKey
+	p.Points += getCardVal
+
+	return Players{
+		PlayerName: p.PlayerName,
+		Money:      p.Money,
+		Bet:        p.Bet,
+		Card:       p.Card,
+		Points:     p.Points,
+	}
+}
+
 func GamePlayer(p *Players) Players {
 	cards := map[string]int{
 		"A":  11,
@@ -53,7 +79,7 @@ func GamePlayer(p *Players) Players {
 		"6":  6,
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 2; i++ {
 		getCardKey, getCardVal := Pick(cards)
 		p.Card += getCardKey
 		p.Points += getCardVal
