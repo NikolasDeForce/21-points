@@ -5,65 +5,36 @@ import (
 	"testing"
 )
 
+var p = point.Players{
+	PlayerName: "Nick",
+	Money:      2000,
+	Bet:        200,
+	Card:       "",
+	Points:     0,
+}
+
+var b = point.Bot{
+	DefName: "Diler",
+	Money:   2000,
+	Bet:     200,
+	Card:    "",
+	Points:  0,
+}
+
+var w = point.Winner{
+	WinnerName: "",
+}
+
 func TestGame(t *testing.T) {
-	t.Run("returns Player Nick get points > 21, balance - bet ", func(t *testing.T) {
-		got := point.GamePlayer(&point.Players{
-			PlayerName: "Nick",
-			Money:      2000,
-			Bet:        200,
-			Card:       "",
-			Points:     24,
-		})
+	_, _, winner := point.StartGame(&p, &b, &w)
+	t.Run("return winner a Nick, balance + bet", func(t *testing.T) {
+		p.Points = 0
+		b.Points = 50
+		got := winner
 
-		want := point.Players{
-			PlayerName: got.PlayerName,
-			Money:      got.Money,
-			Bet:        got.Bet,
-			Card:       got.Card,
-			Points:     got.Points,
-		}
+		want := "Nick"
 
-		assertEqualPlayer(t, got, want)
-	})
-
-	t.Run("returns Player Nick got points < 21, balance + bet", func(t *testing.T) {
-		got := point.GamePlayer(&point.Players{
-			PlayerName: "Nick",
-			Money:      2000,
-			Bet:        300,
-			Card:       "",
-			Points:     24,
-		})
-
-		want := point.Players{
-			PlayerName: got.PlayerName,
-			Money:      got.Money,
-			Bet:        got.Bet,
-			Card:       got.Card,
-			Points:     got.Points,
-		}
-
-		assertEqualPlayer(t, got, want)
-	})
-
-	t.Run("returns Bot got points > 21", func(t *testing.T) {
-		got := point.GameBot(&point.Bot{
-			DefName: "Diler",
-			Money:   2000,
-			Bet:     200,
-			Card:    "",
-			Points:  24,
-		})
-
-		want := point.Bot{
-			DefName: got.DefName,
-			Money:   got.Money,
-			Bet:     got.Bet,
-			Card:    got.Card,
-			Points:  got.Points,
-		}
-
-		assertEqualBot(t, got, want)
+		assertWinner(t, got, want)
 	})
 }
 
@@ -79,6 +50,12 @@ func assertEqualBot(t testing.TB, got, want point.Bot) {
 	t.Helper()
 
 	if got != want {
+		t.Errorf("got %v\nwant %v", got, want)
+	}
+}
+
+func assertWinner(t testing.TB, got point.Winner, want string) {
+	if got.WinnerName != want {
 		t.Errorf("got %v\nwant %v", got, want)
 	}
 }
