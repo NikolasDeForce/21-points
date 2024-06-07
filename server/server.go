@@ -51,7 +51,7 @@ func gameEngHandler(w http.ResponseWriter, r *http.Request) {
 
 	content := Content{
 		Title: "This is Russian Game '21 Point",
-		Text:  "Please, read a role, before press a button",
+		Text:  "Please, read a rule, before press a button",
 	}
 
 	err := tmpl.Execute(w, content)
@@ -111,12 +111,7 @@ func gameParametrsHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, _ := template.ParseFiles("gamecheck.html")
 
-	content := Content{
-		Title: "Игра '21 Очко'",
-		Text:  "Перед тем как нажать кнопку, пожалуйста, прочитайте правила игры!",
-	}
-
-	err := tmpl.Execute(w, content)
+	err := tmpl.Execute(w, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -142,7 +137,7 @@ func gamePlayerHandler(w http.ResponseWriter, r *http.Request) {
 func gameTakeHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("gametake.html")
 
-	p = core.TakeOne(&resPlayer)
+	resPlayer = core.TakeOne(&resPlayer)
 
 	err := tmpl.Execute(w, resPlayer)
 	if err != nil {
