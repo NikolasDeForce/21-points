@@ -178,12 +178,5 @@ func StartGame(p *Players, b *Bot, w *Winner) (Players, Bot, Winner) {
 		winner.WinnerName = "Draw"
 	}
 
-	// fmt.Fprintf(os.Stdout, "Russian '21 Points' Game\n")
-	// fmt.Fprint(os.Stdout, "------------------------------------\n")
-	// fmt.Fprintf(os.Stdout, "Player %v results:\nNick Cards: %v\nPoints: %v\nAfter game Nick have balance: %v\nNick bet: %v\n", resultPlayer.PlayerName, resultPlayer.Card, resultPlayer.Points, resultPlayer.Money, resultPlayer.Bet)
-	// fmt.Fprint(os.Stdout, "------------------------------------\n")
-	// fmt.Fprintf(os.Stdout, "%v results:\nDiler Cards: %v\nPoints: %v\nAfter game diler have balance: %v\nDiler bet: %v\n", resultBot.DefName, resultBot.Card, resultBot.Points, resultBot.Money, resultBot.Bet)
-	// fmt.Fprint(os.Stdout, "------------------------------------\n")
-
 	return resultPlayer, resultBot, winner
 }
