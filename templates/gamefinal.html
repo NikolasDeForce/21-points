@@ -29,6 +29,11 @@
 
       <h1>After game {{ .Bot.DefName }} have balance: {{ .Bot.Money }}</h1>
     </center>
+    <center>
+      <form action="http://localhost:8010/game/check">
+        <button type="submit">Retry</button>
+      </form>
+    </center>
 
     <center>
       <form action="http://localhost:8010/game">

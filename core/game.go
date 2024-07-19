@@ -64,7 +64,7 @@ func GameBot(b *Bot) Bot {
 	}
 }
 
-func StartGame(p *Players, b *Bot, w *Winner) (Players, Bot, Winner) {
+func StartGame(p *Players, b *Bot) (Players, Bot) {
 	resultPlayer := GamePlayer(&Players{
 		PlayerName: p.PlayerName,
 		Money:      2000,
@@ -80,45 +80,48 @@ func StartGame(p *Players, b *Bot, w *Winner) (Players, Bot, Winner) {
 		Points:  0,
 	})
 
-	winner := Winner{
-		w.WinnerName,
+	return Players{PlayerName: resultPlayer.PlayerName, Money: resultPlayer.Money, Bet: resultPlayer.Bet, Card: resultPlayer.Card, Points: resultPlayer.Points},
+		Bot{DefName: resultBot.DefName, Money: resultBot.Money, Bet: resultBot.Bet, Card: resultBot.Card, Points: resultBot.Points}
+}
+
+func ResultGame(p *Players, b *Bot, w *Winner) (Players, Bot, Winner) {
+	if p.Points < b.Points && b.Points < 22 {
+		w.WinnerName = b.DefName
+		b.Money += p.Bet
+		p.Money -= b.Bet
+	} else if b.Points < p.Points && p.Points < 22 {
+		w.WinnerName = p.PlayerName
+		b.Money -= p.Bet
+		p.Money += b.Bet
+	} else if b.Points < 22 && p.Points < 22 && b.Points > p.Points {
+		w.WinnerName = b.DefName
+		b.Money += p.Bet
+		p.Money -= b.Bet
+	} else if p.Points < 22 && b.Points < 22 && p.Points > b.Points {
+		w.WinnerName = p.PlayerName
+		b.Money -= p.Bet
+		p.Money += b.Bet
+	} else if p.Points > 21 && b.Points > 21 && p.Points < b.Points {
+		w.WinnerName = p.PlayerName
+		b.Money -= p.Bet
+		p.Money += b.Bet
+	} else if b.Points > 21 && p.Points > 21 && b.Points < p.Points {
+		w.WinnerName = b.DefName
+		b.Money += p.Bet
+		p.Money -= b.Bet
+	} else if p.Points > 21 && b.Points < 22 {
+		w.WinnerName = b.DefName
+		b.Money += p.Bet
+		p.Money -= b.Bet
+	} else if b.Points > 21 && p.Points < 22 {
+		w.WinnerName = p.PlayerName
+		b.Money -= p.Bet
+		p.Money += b.Bet
+	} else if b.Points == p.Points {
+		w.WinnerName = "Draw"
 	}
 
-	if resultPlayer.Points < resultBot.Points && resultBot.Points < 22 {
-		winner.WinnerName = resultBot.DefName
-		resultBot.Money += resultPlayer.Bet
-		resultPlayer.Money -= resultBot.Bet
-	} else if resultBot.Points < resultPlayer.Points && resultPlayer.Points < 22 {
-		winner.WinnerName = resultPlayer.PlayerName
-		resultBot.Money -= resultPlayer.Bet
-		resultPlayer.Money += resultBot.Bet
-	} else if resultBot.Points < 22 && resultPlayer.Points < 22 && resultBot.Points > resultPlayer.Points {
-		winner.WinnerName = resultBot.DefName
-		resultBot.Money += resultPlayer.Bet
-		resultPlayer.Money -= resultBot.Bet
-	} else if resultPlayer.Points < 22 && resultBot.Points < 22 && resultPlayer.Points > resultBot.Points {
-		winner.WinnerName = resultPlayer.PlayerName
-		resultBot.Money -= resultPlayer.Bet
-		resultPlayer.Money += resultBot.Bet
-	} else if resultPlayer.Points > 21 && resultBot.Points > 21 && resultPlayer.Points < resultBot.Points {
-		winner.WinnerName = resultPlayer.PlayerName
-		resultBot.Money -= resultPlayer.Bet
-		resultPlayer.Money += resultBot.Bet
-	} else if resultBot.Points > 21 && resultPlayer.Points > 21 && resultBot.Points < resultPlayer.Points {
-		winner.WinnerName = resultBot.DefName
-		resultBot.Money += resultPlayer.Bet
-		resultPlayer.Money -= resultBot.Bet
-	} else if resultPlayer.Points > 21 && resultBot.Points < 22 {
-		winner.WinnerName = resultBot.DefName
-		resultBot.Money += resultPlayer.Bet
-		resultPlayer.Money -= resultBot.Bet
-	} else if resultBot.Points > 21 && resultPlayer.Points < 22 {
-		winner.WinnerName = resultPlayer.PlayerName
-		resultBot.Money -= resultPlayer.Bet
-		resultPlayer.Money += resultBot.Bet
-	} else if resultBot.Points == resultPlayer.Points {
-		winner.WinnerName = "Draw"
-	}
-
-	return resultPlayer, resultBot, winner
+	return Players{PlayerName: p.PlayerName, Money: p.Money, Bet: p.Bet, Card: p.Card, Points: p.Points},
+		Bot{DefName: b.DefName, Money: b.Money, Bet: b.Bet, Card: b.Card, Points: b.Points},
+		Winner{WinnerName: w.WinnerName}
 }

@@ -20,29 +20,16 @@ type Final struct {
 	Bot    core.Bot
 }
 
-var p = core.Players{
-	PlayerName: "",
-	Money:      2000,
-	Bet:        0,
-	Card:       "",
-	Points:     0,
-}
+var p = core.Players{}
 
-var b = core.Bot{
-	DefName: "Diler",
-	Money:   2000,
-	Bet:     0,
-	Card:    "",
-	Points:  0,
-}
+var b = core.Bot{}
 
-var win = core.Winner{
-	WinnerName: "",
-}
+var win = core.Winner{}
 
-var resPlayer, resBot, winner = core.StartGame(&p, &b, &win)
+var resPlayer, resBot = core.StartGame(&p, &b)
 
 func GameEngHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameEngHandler Serving:", r.URL.Path, "from", r.Body)
 	tmpl, _ := template.ParseFiles("./templates/gameeng.html")
 
 	content := Content{
@@ -55,11 +42,11 @@ func GameEngHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GameRusHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameRusHandler Serving:", r.URL.Path, "from", r.Body)
 	tmpl, _ := template.ParseFiles("./templates/gamerus.html")
 
 	content := Content{
@@ -72,11 +59,11 @@ func GameRusHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GameParametrsHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameParametersHandler Serving:", r.URL.Path, "from", r.Body)
 
 	r.ParseForm()
 	p.PlayerName = r.FormValue("userName")
@@ -99,11 +86,11 @@ func GameParametrsHandler(w http.ResponseWriter, r *http.Request) {
 		b.Bet = 200
 	}
 
-	if winner.WinnerName == "" {
-		winner.WinnerName = resPlayer.PlayerName
+	if win.WinnerName == "" {
+		win.WinnerName = resPlayer.PlayerName
 	}
 
-	resPlayer, resBot, winner = core.StartGame(&p, &b, &win)
+	resPlayer, resBot = core.StartGame(&p, &b)
 
 	tmpl, _ := template.ParseFiles("./templates/gamecheck.html")
 
@@ -112,11 +99,11 @@ func GameParametrsHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GamePlayerHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GamePlayerHandler Serving:", r.URL.Path, "from", r.Body)
 	tmpl, _ := template.ParseFiles("./templates/gameplayer.html")
 
 	r.ParseForm()
@@ -126,11 +113,11 @@ func GamePlayerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GameTakeHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameTakeHandler Serving:", r.URL.Path, "from", r.Body)
 	tmpl, _ := template.ParseFiles("./templates/gametake.html")
 
 	resPlayer = core.TakeOne(&resPlayer)
@@ -140,11 +127,11 @@ func GameTakeHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GameDilerHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameDilerHandler Serving:", r.URL.Path, "from", r.Body)
 	tmpl, _ := template.ParseFiles("./templates/gamediler.html")
 
 	err := tmpl.Execute(w, resBot)
@@ -152,17 +139,19 @@ func GameDilerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
 
 func GameFinalHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GameFinalHandler Serving:", r.URL.Path, "from", r.Body)
+	finalPlayer, finalBot, finalWinner := core.ResultGame(&resPlayer, &resBot, &win)
+
 	tmpl, _ := template.ParseFiles("./templates/gamefinal.html")
 
 	final := Final{
-		Winner: winner,
-		Player: resPlayer,
-		Bot:    resBot,
+		Winner: finalWinner,
+		Player: finalPlayer,
+		Bot:    finalBot,
 	}
 
 	err := tmpl.Execute(w, final)
@@ -170,6 +159,5 @@ func GameFinalHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	log.Printf("Hello from %v", r.Host)
 	w.WriteHeader(http.StatusOK)
 }
